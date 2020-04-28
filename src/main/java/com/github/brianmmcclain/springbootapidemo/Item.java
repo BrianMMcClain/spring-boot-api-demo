@@ -1,5 +1,8 @@
 package com.github.brianmmcclain.springbootapidemo;
 
+/**
+ * Defines the Item object, which defines an ID, name, and inventory count
+ */
 public class Item {
 
     private final long id;
