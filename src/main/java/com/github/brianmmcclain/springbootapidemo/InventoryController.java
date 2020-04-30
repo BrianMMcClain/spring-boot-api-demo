@@ -30,17 +30,28 @@ public class InventoryController {
             new Item(5, "Headphones", 19.99, 14)
     ));
 
+    /**
+     * Get all items from the inventory, returned as a JSON array
+     * @return All items from the inventory as a JSON array
+     */
+    @GetMapping("/items")
+    public ArrayList<Item> getInventory() {
+        // Spring Boot will handle the serialization of the ArrayList
+        // to a JSON array, so we can return the list directly.
+        return inventory;
+    }
     
     /**
      * Get an item from the inventory by ID. Returned as JSON
      * @param id The id of the item to return
      * @return The id, name, and inventory of the item. If the item does not exist, return 404
      */
-    @GetMapping("/item/{id}")
+    @GetMapping("/items/{id}")
     public Item getItem(@PathVariable("id") Long id) {
         Item item = findItem(id);
         
         if (item == null) {
+            // If the item does not exist, return 404
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found");
         } else {
             return item;
@@ -57,11 +68,12 @@ public class InventoryController {
      * @param req JSON object of fields to update
      * @return The updated item
      */
-    @PostMapping("/item/{id}")
+    @PostMapping("/items/{id}")
     public Item updateItem(@PathVariable("id") Long id, @RequestBody Map<String, String> req) {
         Item item = findItem(id);
 
         if (item == null) {
+            // If the item does not exist, return 404
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found");
         } else {
             // Iterate over the POSTed JSON fields
@@ -87,11 +99,12 @@ public class InventoryController {
      * 
      * @param id The ID of the item to delete
      */
-    @DeleteMapping("/item/{id}")
+    @DeleteMapping("/items/{id}")
     public void deleteItem(@PathVariable("id") Long id) {
         Item item = findItem(id);
 
         if (item == null) {
+            // If the item does not exist, return 404
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found");
         } else {
             // If the item exists, delete it from the list
@@ -105,12 +118,11 @@ public class InventoryController {
      * @return Item object if it exists, null if it does not exist
      */
     private Item findItem(Long id) {
-        // Search the list of items for the item of interest
-        Item item = inventory.stream()
+        // Search the list of items for the item of interest.
+        // If the item does not exist, return null;
+        return inventory.stream()
             .filter(i -> id.equals(i.getId()))
             .findAny()
             .orElse(null);
-        
-        return item;
     }
 }
