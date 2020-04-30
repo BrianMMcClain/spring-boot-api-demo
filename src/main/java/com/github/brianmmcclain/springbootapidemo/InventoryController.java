@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,6 +77,25 @@ public class InventoryController {
 
             // Return the updated item
             return item;
+        }
+    }
+
+    /**
+     * Delete an item from the inventory.
+     * If successful, this method returns a 200 status code if the item is deleted, 
+     * or 404 if the item does not exist.
+     * 
+     * @param id The ID of the item to delete
+     */
+    @DeleteMapping("/item/{id}")
+    public void deleteItem(@PathVariable("id") Long id) {
+        Item item = findItem(id);
+
+        if (item == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found");
+        } else {
+            // If the item exists, delete it from the list
+            inventory.remove(item);
         }
     }
 
