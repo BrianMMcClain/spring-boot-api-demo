@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -60,6 +62,25 @@ public class InventoryController {
     }
 
     /**
+     * Create a new item and add it to the inventory. Takes in a JSON object defining
+     * the "name", "price", and "count"
+     * 
+     * @param req Request body of the POST request containing "name", "price", and "count"
+     * @return The newly created Item
+     */
+    @PostMapping("/items")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Item createItem(@RequestBody Map<String, String> req) {
+        // Generate an ID for the new item 
+        Long newID = inventory.get(inventory.size() - 1).getId() + 1;
+        
+        // Create the new item. In reality, there should be better input validation here
+        Item newItem = new Item(newID, req.get("name"), Double.parseDouble(req.get("price")), Integer.parseInt(req.get("count")));
+        inventory.add(newItem);
+        return newItem;
+    }
+
+    /**
      * Update the price and/or count of an item in the inventory. Expects JSON.
      * 
      * Example: {"price": 12.99, "count": 12}
@@ -68,7 +89,7 @@ public class InventoryController {
      * @param req JSON object of fields to update
      * @return The updated item
      */
-    @PostMapping("/items/{id}")
+    @PutMapping("/items/{id}")
     public Item updateItem(@PathVariable("id") Long id, @RequestBody Map<String, String> req) {
         Item item = findItem(id);
 
@@ -76,6 +97,7 @@ public class InventoryController {
             // If the item does not exist, return 404
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found");
         } else {
+            // Item exists, so update an existing one
             // Iterate over the POSTed JSON fields
             for (String k : req.keySet()) {
                 // Update the items price if a price field is provided
