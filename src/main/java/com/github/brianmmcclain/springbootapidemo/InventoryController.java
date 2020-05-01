@@ -60,7 +60,7 @@ public class InventoryController {
         }
         
     }
-
+    
     /**
      * Create a new item and add it to the inventory. Takes in a JSON object defining
      * the "name", "price", and "count"
@@ -70,12 +70,11 @@ public class InventoryController {
      */
     @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
-    public Item createItem(@RequestBody Map<String, String> req) {
-        // Generate an ID for the new item 
+    public Item createItem(@RequestBody Item req) {
+        // Since item IDs cannot be changed, generated a new ID, create a new item, add it to the
+        // inventory, and then return the new item.
         Long newID = inventory.get(inventory.size() - 1).getId() + 1;
-        
-        // Create the new item. In reality, there should be better input validation here
-        Item newItem = new Item(newID, req.get("name"), Double.parseDouble(req.get("price")), Integer.parseInt(req.get("count")));
+        Item newItem = new Item(newID, req.getName(), req.getPrice(), req.getCount());
         inventory.add(newItem);
         return newItem;
     }
