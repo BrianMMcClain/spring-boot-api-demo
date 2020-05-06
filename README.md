@@ -54,6 +54,6 @@ Sending Requests With cURL
 Tests
 ---
 
-Tests are also provided for each operation, located in the [HttpRequestsTest.java](/src/test/java/com/github/brianmmcclain/springbootapidemo/HttpRequestsTest.java) file.
+Tests are also provided for each operation, located in the [HttpRequestsTest.java](https://github.com/BrianMMcClain/spring-boot-api-demo/blob/master/src/test/java/com/github/brianmmcclain/springbootapidemo/HttpRequestsTest.java) file.
 
 By default, all tests are ran when the code is built with Maven (ie. `./mvnw clean package`). You can also run the tests independently with `./mvnw test`.
