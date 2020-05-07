@@ -1,5 +1,7 @@
 # spring-boot-api-demo
 
+![Maven Tests](https://github.com/BrianMMcClain/spring-boot-api-demo/workflows/Maven%20Tests/badge.svg?branch=master)
+
 This demo presents a limited REST API that could represent an inventory system for a shop. The inventory holds items, each with an ID, name, price, and count.
 
 The API
